@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>即時字幕與翻譯應用程式</title>
+</head>
+<body>
+    <h1>即時字幕與翻譯</h1>
+    <select id="recognitionApi">
+        <option value="google">Google Speech-to-Text</option>
+        <option value="aws">AWS Transcribe</option>
+        <!-- 更多語音識別API選項 -->
+    </select>
+    <select id="translationApi">
+        <option value="microsoft">Microsoft Translator</option>
+        <option value="google">Google Translate</option>
+        <!-- 更多翻譯API選項 -->
+    </select>
+    <button onclick="startTranscription()">開始轉錄</button>
+    <button onclick="startTranslation()">翻譯</button>
+    <div>
+        <h2>轉錄結果:</h2>
+        <p id="transcript"></p>
+        <h2>翻譯結果:</h2>
+        <p id="translation"></p>
+    </div>
+
+    <script>
+        function startTranscription() {
+            var recognitionApi = document.getElementById('recognitionApi').value;
+            // 假設您的後端轉錄端點是 '/transcribe'
+            fetch('/transcribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ audioData: '您的音頻數據', api: recognitionApi })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('transcript').textContent = data.transcript;
+            })
+            .catch(error => console.error('錯誤:', error));
+        }
+
+        function startTranslation() {
+            var translationApi = document.getElementById('translationApi').value;
+            // 假設您的後端翻譯端點是 '/translate'
+            fetch('/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: '要翻譯的文本', api: translationApi })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('translation').textContent = data.translation;
+            })
+            .catch(error => console.error('錯誤:', error));
+        }
+    </script>
+</body>
+</html>
