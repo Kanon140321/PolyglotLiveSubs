@@ -6,6 +6,12 @@
 </head>
 <body>
     <h1>即時字幕與翻譯</h1>
+    <label for="recognitionApiKey">語音識別API KEY:</label>
+    <input type="text" id="recognitionApiKey" name="recognitionApiKey" placeholder="輸入語音識別API KEY">
+    <br>
+    <label for="translationApiKey">翻譯API KEY:</label>
+    <input type="text" id="translationApiKey" name="translationApiKey" placeholder="輸入翻譯API KEY">
+    <br>
     <select id="recognitionApi">
         <option value="google">Google Speech-to-Text</option>
         <option value="aws">AWS Transcribe</option>
@@ -27,12 +33,14 @@
 
     <script>
         function startTranscription() {
+            var recognitionApiKey = document.getElementById('recognitionApiKey').value;
             var recognitionApi = document.getElementById('recognitionApi').value;
             // 假設您的後端轉錄端點是 '/transcribe'
             fetch('/transcribe', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + recognitionApiKey
                 },
                 body: JSON.stringify({ audioData: '您的音頻數據', api: recognitionApi })
             })
@@ -44,12 +52,14 @@
         }
 
         function startTranslation() {
+            var translationApiKey = document.getElementById('translationApiKey').value;
             var translationApi = document.getElementById('translationApi').value;
             // 假設您的後端翻譯端點是 '/translate'
             fetch('/translate', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + translationApiKey
                 },
                 body: JSON.stringify({ text: '要翻譯的文本', api: translationApi })
             })
